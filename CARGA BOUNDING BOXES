@@ -65,7 +65,7 @@ patron = re.compile(r'^B_BOXES_\d+$')
 
 # Me quedo con las carpetas que cumplen el patrón 
 
-carpetas_train=[carpeta for carpeta in carpetas if patron.match(carpeta)]
+carpetas_train=[carpeta for carpeta in carpetas if patron.match(carpeta)] ## LAS CARPETAS SON LAS MISMAS PARA LOS TRES CONJUNTOS
 
 
 
@@ -81,8 +81,10 @@ for carpeta in carpetas_train:
         caja=0
         foto=Image.open(f"{ruta_train}/{carpeta}/{image}").convert('L')
         h,w=np.array(foto).shape
-        imagenes_train.append(np.array(foto))
-        etiquetas_train.append(etiqueta)
+        if not(w<30 or w>500):
+            if not(h<30 or h>250):
+                imagenes_train.append(add_padding(np.array(foto)))
+                etiquetas_train.append(etiqueta)
     
     etiqueta+=1
 
@@ -98,8 +100,10 @@ for carpeta in carpetas_train:
         caja=0
         foto=Image.open(f"{ruta_val}/{carpeta}/{image}").convert('L')
         h,w=np.array(foto).shape
-        imagenes_train.append(np.array(foto))
-        etiquetas_train.append(etiqueta)
+        if not(w<30 or w>500):
+            if not(h<30 or h>250):
+            imagenes_val.append(add_padding(np.array(foto)))
+            etiquetas_val.append(etiqueta)
     
     etiqueta+=1
 
@@ -115,8 +119,10 @@ for carpeta in carpetas_train:
         caja=0
         foto=Image.open(f"{ruta_test}/{carpeta}/{image}").convert('L')
         h,w=np.array(foto).shape
-        imagenes_train.append(np.array(foto))
-        etiquetas_train.append(etiqueta)
+        if not(w<30 or w>500):
+            if not(h<30 or h>250):
+                imagenes_test.append(add_padding(np.array(foto)))
+                etiquetas_test.append(etiqueta)
     
     etiqueta+=1
 
