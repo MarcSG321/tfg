@@ -1,4 +1,4 @@
-import o
+import os
 import re
 from PIL import Image
 import numpy as np
