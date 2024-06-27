@@ -222,8 +222,6 @@ for imagen in X_test:
       print(len(x_test)-h)
       h+=1
   predic=np.argmax(np.array(pred))
-  if predic==13:
-    predics.append(pred)
   tres_maximos = np.argpartition(pred, -3)[-3:]
   indices_maximos = tres_maximos[tres_maximos.argsort()]
   predicciones.append(predic)
