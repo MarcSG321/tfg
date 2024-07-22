@@ -59,11 +59,10 @@ carpetas = os.listdir(ruta_test)
 ## TANTO EN TRAIN TEST Y VAL TIENEN LAS CARPETAS CON EL MISMO NOMBRE
 
 
-# Expresión regular para encontrar carpetas con nombres que comienzan con 'M' seguido de números
+
 
 patron = re.compile(r'^B_BOXES_\d+$')
 
-# Me quedo con las carpetas que cumplen el patrón 
 
 carpetas_train=[carpeta for carpeta in carpetas if patron.match(carpeta)] ## LAS CARPETAS SON LAS MISMAS PARA LOS TRES CONJUNTOS
 
