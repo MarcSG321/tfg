@@ -183,6 +183,18 @@ early_stopping_callback = tf.keras.callbacks.EarlyStopping(
 )
 
 
+history=model.fit(X_train, Y_train, epochs=1000,validation_data=(x_val, y_val),callbacks=[early_stopping_callback],batch_size=16)
+
+# En el earlystoppong se detiene el entrenamiento, luego se añade el conjunto de validación al de entrenamiento
+
+X_train_val= np.concatenate((X_train, x_val))
+
+Y_train_val=np.concatenate((Y_train, y_val))
+
+
+history=model.fit(X_train_val, Y_train_val, epochs=5,batch_size=16)
+
+# MEDIDAS DE EVALUACIÓN 
 
 def calcular_top3_accuracy(predicciones, etiquetas_verdaderas):
     # Obtén las tres clases con las probabilidades más altas para cada muestra
