@@ -1,0 +1,160 @@
+import os
+import re
+from PIL import Image
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+import easyocr
+import tensorflow as tf
+from tensorflow import keras
+from sklearn.model_selection import train_test_split
+
+
+ruta_train = "D:/marcs/CIENCIA DE DATOS/CUARTO/TFG/ICDAR2017/TRAIN"
+
+ruta_val = "D:/marcs/CIENCIA DE DATOS/CUARTO/TFG/ICDAR2017/VAL"
+
+ruta_test = "D:/marcs/CIENCIA DE DATOS/CUARTO/TFG/ICDAR2017/TEST"
+
+
+carpetas = os.listdir(ruta_test)
+
+
+## TANTO EN TRAIN TEST Y VAL TIENEN LAS CARPETAS CON EL MISMO NOMBRE
+
+
+# Expresión regular para encontrar carpetas con nombres que comienzan con 'M' seguido de números
+
+patron = re.compile(r'^B_BOXES_\d+$')
+
+# Me quedo con las carpetas que cumplen el patrón 
+
+carpetas_train=[carpeta for carpeta in carpetas if patron.match(carpeta)]
+
+
+
+
+imagenes_train=[]
+etiquetas_train=[]
+etiqueta=0
+img=0
+for carpeta in carpetas_train:
+    ruta_carpeta=f"{ruta_train}/{carpeta}"
+    images=os.listdir(ruta_carpeta)
+    for image in images:
+        caja=0
+        foto=Image.open(f"{ruta_train}/{carpeta}/{image}").convert('L')
+        imagenes_train.append(np.array(foto))
+        etiquetas_train.append(etiqueta)
+    
+    etiqueta+=1
+
+
+
+imagenes_val=[]
+etiquetas_val=[]
+etiqueta=0
+img=0
+for carpeta in carpetas_train:
+    ruta_carpeta=f"{ruta_val}/{carpeta}"
+    images=os.listdir(ruta_carpeta)
+    for image in images:
+        caja=0
+        foto=Image.open(f"{ruta_val}/{carpeta}/{image}").convert('L')
+        imagenes_val.append(np.array(foto))
+        etiquetas_val.append(etiqueta)
+    
+    etiqueta+=1
+
+
+
+
+imagenes_test=[]
+etiquetas_test=[]
+etiqueta=0
+img=0
+for carpeta in carpetas_train:
+    ruta_carpeta=f"{ruta_test}/{carpeta}"
+    images=os.listdir(ruta_carpeta)
+    for image in images:
+        caja=0
+        foto=Image.open(f"{ruta_test}/{carpeta}/{image}").convert('L')
+        imagenes_test.append(np.array(foto))
+        etiquetas_test.append(etiqueta)
+    
+    etiqueta+=1
+
+
+
+print(len(imagenes_train))
+
+print(len(imagenes_val))
+
+print(len(imagenes_test))
+
+
+
+todas=imagenes_train+imagenes_val+imagenes_test
+
+#-----------------------------------------
+
+ancho=[]
+alto=[]
+
+for imagen in todas:
+    h,w=imagen.shape
+    ancho.append(w)
+    alto.append(h)
+
+print(max(alto),max(ancho))
+
+
+#-----------------------------------------
+
+plt.hist(ancho,bins='auto',color='blue', alpha=0.7)
+plt.xlabel('Ancho')
+plt.ylabel('Frecuencia')
+plt.grid(True)
+plt.show()
+
+
+
+plt.hist(alto,bins='auto',color='blue', alpha=0.7)
+plt.xlabel('Alto')
+plt.ylabel('Frecuencia')
+plt.grid(True)
+plt.show()
+
+
+
+#---------------------------------------------------
+
+
+conservadas_train=0
+for imagen in imagenes_train:
+    h,w=imagen.shape
+    if h>=30 and h<=250:
+        if w>=30 and w<=500:
+            conservadas_train+=1
+
+conservadas_val=0
+for imagen in imagenes_val:
+    h,w=imagen.shape
+    if h>=30 and h<=250:
+        if w>=30 and w<=500:
+            conservadas_val+=1
+
+
+conservadas_test=0
+for imagen in imagenes_test:
+    h,w=imagen.shape
+    if h>=30 and h<=250:
+        if w>=30 and w<=500:
+            conservadas_test+=1
+
+
+print(conservadas_train)
+
+print(conservadas_val)
+
+print(conservadas_test)
